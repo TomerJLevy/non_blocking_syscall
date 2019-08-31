@@ -35,6 +35,8 @@ void AsyncOper::read(const std::string& aFile, std::function<void(const std::str
             } else {
                 aFailFunc("Failed to open file" + aFile);
             }
+        } catch(const std::exception& e) {
+            aFailFunc("Got exception for file" + aFile + ": " + e.what());
         } catch(...) {
             aFailFunc("Got exception for file" + aFile);
         }
