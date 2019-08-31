@@ -1,18 +1,18 @@
 /*
- * Cppasio.cpp
+ * AsyncOper.cpp
  *
  *  Created on: Aug 31, 2019
- *      Author: fpd
+ *      Author: Tomer Levy
  */
 
-#include "Cppasio.h"
+#include "AsyncOper.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
 using namespace cppasio;
 
-void AsioOper::run(std::function<bool()>&& aFunc, std::function<void()>&& aCallback, std::function<void()>&& aFailFunc) {
+void AsyncOper::run(std::function<bool()>&& aFunc, std::function<void()>&& aCallback, std::function<void()>&& aFailFunc) {
     run([&]{
         try {
             if (aFunc()) {
@@ -26,7 +26,7 @@ void AsioOper::run(std::function<bool()>&& aFunc, std::function<void()>&& aCallb
     });
 }
 
-void AsioOper::read(const std::string& aFile, std::function<void(const std::string)>&& aCallback, std::function<void(const std::string&)>&& aFailFunc) {
+void AsyncOper::read(const std::string& aFile, std::function<void(const std::string)>&& aCallback, std::function<void(const std::string&)>&& aFailFunc) {
     run([&]{
         try {
             std::string lContent;
@@ -41,7 +41,7 @@ void AsioOper::read(const std::string& aFile, std::function<void(const std::stri
     });
 }
 
-void AsioOper::write(const std::string& aFile, const std::string& aContent, std::function<void(const std::string&)>&& aCallback, std::function<void(const std::string&)>&& aFailFunc) {
+void AsyncOper::write(const std::string& aFile, const std::string& aContent, std::function<void(const std::string&)>&& aCallback, std::function<void(const std::string&)>&& aFailFunc) {
     run([&]{
         try {
             if (writeFile(aFile, aContent)) {
@@ -55,11 +55,11 @@ void AsioOper::write(const std::string& aFile, const std::string& aContent, std:
     });
 }
 
-void AsioOper::run(std::function<void()>&& aFunc) {
+void AsyncOper::run(std::function<void()>&& aFunc) {
     std::thread(aFunc).detach();
 }
 
-bool AsioOper::writeFile(const std::string& aFile, const std::string& aContent) {
+bool AsyncOper::writeFile(const std::string& aFile, const std::string& aContent) {
     std::ofstream lFile(aFile);
     if (!lFile.is_open()) {
         return false;
@@ -70,7 +70,7 @@ bool AsioOper::writeFile(const std::string& aFile, const std::string& aContent) 
     return true;
 }
 
-bool AsioOper::readFile(const std::string& aFile, std::string& aContent) {
+bool AsyncOper::readFile(const std::string& aFile, std::string& aContent) {
     aContent = "";
     std::ifstream lFile(aFile);
     if (!lFile.is_open()) {
