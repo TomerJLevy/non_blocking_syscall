@@ -1,17 +1,15 @@
 /*
- * TimedIO.h
+ * TimedOper.h
  *
  *  Created on: Aug 21, 2019
  *      Author: Ran Atias & Tomer Levy
  */
 
-#ifndef TIMED_IO_H_
-#define TIMED_IO_H_
+#ifndef _TIMED_OPER_H_
+#define _TIMED_OPER_H_
 
-#include <iostream>
 #include <future>
 #include <signal.h>
-#include <string.h>
 #include <set>
 
 // This class allows to set timeout for IO calls.
@@ -19,7 +17,7 @@
 namespace AsyncCpp {
 using SIGNAL = int;
 
-class  TimedIO {
+class  TimedOper {
 	class SignalStackGuard;
 
 	class SafeSignalsStack {
@@ -49,21 +47,14 @@ class  TimedIO {
 	};
 
 public:
-
-static TimedIO& instance();
-
-// delete copy and move constructors and assign operators
-TimedIO(TimedIO const&) = delete;             // Copy construct
-TimedIO(TimedIO&&) = delete;                  // Move construct
-TimedIO& operator=(TimedIO const&) = delete;  // Copy assign
-TimedIO& operator=(TimedIO &&) = delete;      // Move assign
-
+static TimedOper& instance();
 
 template<typename FUNCTION>
 static void promSetter(FUNCTION&& aFunc, std::shared_ptr<std::promise<void>> aProm) {
     aFunc();
     aProm->set_value();
 }
+	
 template<typename FUNCTION, typename T>
 static void promSetter(FUNCTION&& aFunc, std::shared_ptr<std::promise<T>> aProm) {
     auto res = aFunc();
@@ -83,7 +74,6 @@ auto try_run_for(FUNCTION&& aFunc, int aTimeout) -> std::future<decltype(aFunc()
 
     std::future_status status = fut.wait_for(std::chrono::seconds(aTimeout));
     if (status != std::future_status::ready) {
-        std::cout << "KILL" << std::endl;
         Kill(lThread, lSignal);
         lThread.join();
         throw std::runtime_error("timeout passed!");
@@ -93,8 +83,12 @@ auto try_run_for(FUNCTION&& aFunc, int aTimeout) -> std::future<decltype(aFunc()
 }
 
 private:
-TimedIO() = default;
-~TimedIO() = default;
+TimedOper() = default;
+~TimedOper() = default;
+TimedOper(const TimedOper&) = delete;             // Copy construct
+TimedOper(TimedOper&&) = delete;                  // Move construct
+TimedOper& operator=(const TimedOpert&) = delete;  // Copy assign
+TimedOper& operator=(TimedOper&&) = delete;      // Move assign
 
 template<typename FUNCTION>
 static auto asyncJob(FUNCTION&& aFunc, std::thread& aThread, SIGNAL signum) -> std::future<decltype(aFunc())> {
