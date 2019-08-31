@@ -11,7 +11,7 @@
 #include <thread>
 #include <string>
 
-namespace cppasio {
+namespace AsyncCpp {
 
 class AsyncOper {
 public:
