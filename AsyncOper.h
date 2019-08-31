@@ -1,24 +1,24 @@
 /*
- * Cppasio.h
+ * AsyncOper.h
  *
  *  Created on: Aug 30, 2019
- *      Author: fpd
+ *      Author: Tomer Levy
  */
 
-#ifndef CPPASIO_H_
-#define CPPASIO_H_
+#ifndef _ASYNC_OPER_H_
+#define _ASYNC_OPER_H_
 
 #include <thread>
 #include <string>
 
 namespace cppasio {
 
-class AsioOper {
+class AsyncOper {
 public:
-    AsioOper(const AsioOper&) = delete;
-    AsioOper(AsioOper&&) = delete;
-    AsioOper& operator=(const AsioOper&) = delete;
-    AsioOper& operator=(AsioOper&&) = delete;
+    AsyncOper(const AsyncOper&) = delete;
+    AsyncOper(AsyncOper&&) = delete;
+    AsyncOper& operator=(const AsyncOper&) = delete;
+    AsyncOper& operator=(AsyncOper&&) = delete;
 
     static void run(std::function<bool()>&& aFunc, std::function<void()>&& aCallback, std::function<void()>&& aFailFunc);
 
@@ -27,8 +27,8 @@ public:
     static void write(const std::string& aFile, const std::string& aContent, std::function<void(const std::string&)>&& aCallback, std::function<void(const std::string&)>&& aFailFunc);
 
 private:
-    AsioOper() = default;
-    ~AsioOper() = default;
+    AsyncOper() = delete;
+    ~AsyncOper() = default;
 
     static void run(std::function<void()>&& aFunc);
     static bool readFile(const std::string& aFile, std::string& aContent);
@@ -37,5 +37,4 @@ private:
 
 }
 
-
-#endif /* CPPASIO_H_ */
+#endif /* _ASYNC_OPER_H_ */
