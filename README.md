@@ -1,2 +1,3 @@
-# Timed IO
-Allows CPP to set timeout for I/O operations
+# Timed and asynchronous Operations
+
+Allows CPP to set timeout for operations or make it asynchronous with callbacks
